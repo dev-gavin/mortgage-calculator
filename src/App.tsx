@@ -30,13 +30,25 @@ function App() {
     repaymentTerm: calculatorParameters.repaymentTerm.min,
     interestRate: calculatorParameters.interestRate.min,
   });
-  console.log(formData);
+
+  const [monthlyPayment, setMonthlyPayment] = useState();
 
   function handleFormChange({ target }) {
     setFormData((previous) => ({
       ...previous,
       [target.id]: Number(target.value),
     }));
+  }
+
+  function handleClick(event) {
+    const loanAmount = formData.purchasePrice - formData.downPayment;
+    const monthlyRate = formData.interestRate / 100 / 12;
+    const periods = formData.repaymentTerm * 12;
+    const paymentAmount =
+      loanAmount *
+      ((monthlyRate * Math.pow(1 + monthlyRate, periods)) /
+        (Math.pow(1 + monthlyRate, periods) - 1));
+    setMonthlyPayment(paymentAmount);
   }
 
   return (
@@ -117,15 +129,19 @@ function App() {
         </div>
 
         <p>
-          Loan amount <span>50000</span>
+          Loan amount{" "}
+          <span>
+            ${(formData.purchasePrice - formData.downPayment).toLocaleString()}
+          </span>
         </p>
 
         <p className="text-wrap">
-          Estimated monthly payment: <span>50000</span>
+          Estimated monthly payment:{" "}
+          <span>${Math.round(monthlyPayment).toLocaleString()}</span>
         </p>
       </section>
 
-      <button> Get a mortgage quote</button>
+      <button onClick={handleClick}> Get a mortgage quote</button>
     </div>
   );
 }
