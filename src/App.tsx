@@ -24,12 +24,20 @@ const calculatorParameters = {
 };
 
 function App() {
-  const [formData, setFromData] = useState({
+  const [formData, setFormData] = useState({
     purchasePrice: calculatorParameters.purchasePrice.min,
     downPayment: calculatorParameters.downPayment.min,
     repaymentTerm: calculatorParameters.repaymentTerm.min,
     interestRate: calculatorParameters.interestRate.min,
   });
+  console.log(formData);
+
+  function handleFormChange({ target }) {
+    setFormData((previous) => ({
+      ...previous,
+      [target.id]: Number(target.value),
+    }));
+  }
 
   return (
     <div className="mx-auto w-2/3 bg-violet-200 py-10 px-7 text-nowrap">
@@ -40,7 +48,7 @@ function App() {
           <label htmlFor="purchasePrice" className="text-gray-700">
             Purchase price:
             <span className="text-gray-900 text-xl pl-7 align-middle">
-              5000
+              ${formData.purchasePrice.toLocaleString()}
             </span>
           </label>
           <input
@@ -50,14 +58,16 @@ function App() {
             min={calculatorParameters.purchasePrice.min}
             max={calculatorParameters.purchasePrice.max}
             step={calculatorParameters.purchasePrice.step}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={handleFormChange}
           />
         </div>
 
         <div>
-          <label htmlFor="downPayment">
+          <label htmlFor="downPayment" className="text-gray-700">
             Down payment:
-            <span className=" text-xl pl-7 align-middle">5000</span>
+            <span className="text-gray-900 text-xl pl-7 align-middle">
+              ${formData.downPayment.toLocaleString()}
+            </span>
           </label>
           <input
             className="accent-violet-600 block w-full"
@@ -66,14 +76,16 @@ function App() {
             min={calculatorParameters.downPayment.min}
             max={calculatorParameters.downPayment.max}
             step={calculatorParameters.downPayment.step}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={handleFormChange}
           />
         </div>
 
         <div>
-          <label htmlFor="repaymentTerm">
+          <label htmlFor="repaymentTerm text-gray-700">
             Repayment term:
-            <span className=" text-xl pl-7 align-middle">30</span>
+            <span className="text-gray-900 text-xl pl-7 align-middle">
+              {formData.repaymentTerm.toLocaleString()}
+            </span>
           </label>
           <input
             className="accent-violet-600 block w-full"
@@ -82,14 +94,16 @@ function App() {
             min={calculatorParameters.repaymentTerm.min}
             max={calculatorParameters.repaymentTerm.max}
             step={calculatorParameters.repaymentTerm.step}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={handleFormChange}
           />
         </div>
 
         <div>
           <label htmlFor="interestRate">
             Interest rate:
-            <span className=" text-xl pl-7 align-middle">1.1</span>
+            <span className="text-gray-900 text-xl pl-7 align-middle">
+              {formData.interestRate.toLocaleString()} %
+            </span>
           </label>
           <input
             className="accent-violet-600 block w-full"
@@ -98,7 +112,7 @@ function App() {
             min={calculatorParameters.interestRate.min}
             max={calculatorParameters.interestRate.max}
             step={calculatorParameters.interestRate.step}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={handleFormChange}
           />
         </div>
 
