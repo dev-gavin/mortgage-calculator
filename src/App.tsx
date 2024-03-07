@@ -40,8 +40,9 @@ function App() {
     }));
   }
 
+  const loanAmount = formData.purchasePrice - formData.downPayment;
+
   function handleClick(event) {
-    const loanAmount = formData.purchasePrice - formData.downPayment;
     const monthlyRate = formData.interestRate / 100 / 12;
     const periods = formData.repaymentTerm * 12;
     const paymentAmount =
@@ -52,96 +53,104 @@ function App() {
   }
 
   return (
-    <div className="mx-auto w-2/3 bg-violet-200 py-10 px-7 text-nowrap">
-      <h1 className="text-2xl font-bold mb-8">Mortgage payment calculator</h1>
+    <div className="h-screen flex items-center justify-center">
+      <div className="w-2/3 bg-violet-200 py-10 px-7 text-nowrap rounded-lg">
+        <h1 className="text-2xl font-bold mb-8">Mortgage payment calculator</h1>
 
-      <section className="flex flex-wrap gap-6 justify-between [&>*]:w-full">
-        <div>
-          <label htmlFor="purchasePrice" className="text-gray-700">
-            Purchase price:
-            <span className="text-gray-900 text-xl pl-7 align-middle">
-              ${formData.purchasePrice.toLocaleString()}
+        <section className="flex flex-wrap gap-6 justify-between [&>*]:w-full">
+          <div className="w-14">
+            <label htmlFor="purchasePrice" className="text-gray-700">
+              Purchase price:
+              <span className="text-gray-900 text-xl pl-7 align-middle">
+                ${formData.purchasePrice.toLocaleString()}
+              </span>
+            </label>
+            <input
+              id="purchasePrice"
+              className="accent-violet-600 block w-full mt-2"
+              type="range"
+              min={calculatorParameters.purchasePrice.min}
+              max={calculatorParameters.purchasePrice.max}
+              step={calculatorParameters.purchasePrice.step}
+              onChange={handleFormChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="downPayment" className="text-gray-700">
+              Down payment:
+              <span className="text-gray-900 text-xl pl-7 align-middle">
+                ${formData.downPayment.toLocaleString()}
+              </span>
+            </label>
+            <input
+              className="accent-violet-600 block w-full"
+              id="downPayment"
+              type="range"
+              min={calculatorParameters.downPayment.min}
+              max={calculatorParameters.downPayment.max}
+              step={calculatorParameters.downPayment.step}
+              onChange={handleFormChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="repaymentTerm text-gray-700">
+              Repayment term:
+              <span className="text-gray-900 text-xl pl-7 align-middle">
+                {formData.repaymentTerm.toLocaleString()}
+              </span>
+            </label>
+            <input
+              className="accent-violet-600 block w-full"
+              id="repaymentTerm"
+              type="range"
+              min={calculatorParameters.repaymentTerm.min}
+              max={calculatorParameters.repaymentTerm.max}
+              step={calculatorParameters.repaymentTerm.step}
+              onChange={handleFormChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="interestRate">
+              Interest rate:
+              <span className="text-gray-900 text-xl pl-7 align-middle">
+                {formData.interestRate.toLocaleString()} %
+              </span>
+            </label>
+            <input
+              className="accent-violet-600 block w-full"
+              id="interestRate"
+              type="range"
+              min={calculatorParameters.interestRate.min}
+              max={calculatorParameters.interestRate.max}
+              step={calculatorParameters.interestRate.step}
+              onChange={handleFormChange}
+            />
+          </div>
+
+          <p>
+            Loan amount{" "}
+            <span className="block text-xl">
+              {loanAmount < 0 ? "Error" : `$${loanAmount.toLocaleString()}`}
             </span>
-          </label>
-          <input
-            id="purchasePrice"
-            className="accent-violet-600 block w-full mt-2"
-            type="range"
-            min={calculatorParameters.purchasePrice.min}
-            max={calculatorParameters.purchasePrice.max}
-            step={calculatorParameters.purchasePrice.step}
-            onChange={handleFormChange}
-          />
-        </div>
+          </p>
 
-        <div>
-          <label htmlFor="downPayment" className="text-gray-700">
-            Down payment:
-            <span className="text-gray-900 text-xl pl-7 align-middle">
-              ${formData.downPayment.toLocaleString()}
+          <p className="text-wrap">
+            Estimated monthly payment:{" "}
+            <span className="block text-xl">
+              ${Math.round(monthlyPayment).toLocaleString()}
             </span>
-          </label>
-          <input
-            className="accent-violet-600 block w-full"
-            id="downPayment"
-            type="range"
-            min={calculatorParameters.downPayment.min}
-            max={calculatorParameters.downPayment.max}
-            step={calculatorParameters.downPayment.step}
-            onChange={handleFormChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="repaymentTerm text-gray-700">
-            Repayment term:
-            <span className="text-gray-900 text-xl pl-7 align-middle">
-              {formData.repaymentTerm.toLocaleString()}
-            </span>
-          </label>
-          <input
-            className="accent-violet-600 block w-full"
-            id="repaymentTerm"
-            type="range"
-            min={calculatorParameters.repaymentTerm.min}
-            max={calculatorParameters.repaymentTerm.max}
-            step={calculatorParameters.repaymentTerm.step}
-            onChange={handleFormChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="interestRate">
-            Interest rate:
-            <span className="text-gray-900 text-xl pl-7 align-middle">
-              {formData.interestRate.toLocaleString()} %
-            </span>
-          </label>
-          <input
-            className="accent-violet-600 block w-full"
-            id="interestRate"
-            type="range"
-            min={calculatorParameters.interestRate.min}
-            max={calculatorParameters.interestRate.max}
-            step={calculatorParameters.interestRate.step}
-            onChange={handleFormChange}
-          />
-        </div>
-
-        <p>
-          Loan amount{" "}
-          <span>
-            ${(formData.purchasePrice - formData.downPayment).toLocaleString()}
-          </span>
-        </p>
-
-        <p className="text-wrap">
-          Estimated monthly payment:{" "}
-          <span>${Math.round(monthlyPayment).toLocaleString()}</span>
-        </p>
-      </section>
-
-      <button onClick={handleClick}> Get a mortgage quote</button>
+          </p>
+        </section>
+        <button
+          className="px-7 py-4 mt-8 bg-violet-500 text-white rounded-lg"
+          onClick={handleClick}
+        >
+          Get a mortgage quote
+        </button>
+      </div>
     </div>
   );
 }
